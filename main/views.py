@@ -3,6 +3,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
 # Create your views here.
+def home_view(request):
+    return render(request, "main/home.html")
+
 def login_view(request):
     if request.method == "POST":
         user = authenticate(
