@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Video</title>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e5e5e5;
+        }
+
+        .upload-card {
+            border: 1px dashed #ddd;
+            border-radius: 12px;
+            background: #ffffff;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .upload-card:hover {
+            background: #fafafa;
+        }
+
+        .info-box {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row min-vh-100">
+
+        <!-- Sidebar -->
+        <div class="col-auto sidebar d-flex flex-column p-4">
+            <h5 class="mb-4">Software Engineering Project Studio</h5>
+
+            <div class="mb-3 text-muted">Manage</div>
+            <a href="#" class="text-decoration-none mb-2">Home</a>
+            <a href="#" class="text-decoration-none mb-2">Posts</a>
+            <a href="#" class="text-decoration-none mb-2">Analytics</a>
+            <a href="#" class="text-decoration-none mb-2">Comments</a>
+
+            <div class="mt-4 mb-3 text-muted">Tools</div>
+            <a href="#" class="text-decoration-none mb-2">Monetization</a>
+            <a href="#" class="text-decoration-none mb-2">Unlimited Sounds</a>
+            <a href="#" class="text-decoration-none mb-2">Smart Split</a>
+
+            <div class="mt-auto">
+                {% if user.is_authenticated %}
+                    <div class="text-success small mb-2">
+                        Logged in as {{ user.username }}
+                    </div>
+                    <a href="/logout" class="btn btn-outline-danger w-100">Logout</a>
+                {% else %}
+                    <a href="/login" class="btn btn-primary w-100 mb-2">Login</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col p-5">
+
+
+            <div class="upload-card mb-4">
+                <h5 class="mb-3">Select video to upload</h5>
+                <p class="text-muted">Or drag and drop it here</p>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="video" class="form-control mb-3">
+                    <button type="submit" class="btn btn-danger px-4">
+                        Select video
+                    </button>
+                </form>
+            </div>
+
+            <div class="row text-center info-box">
+                <div class="col-md-3 mb-3">
+                    <strong>Size & Duration</strong><br>
+                    Max size: 30GB<br>
+                    Max duration: 60 minutes
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <strong>File Formats</strong><br>
+                    Recommended: .mp4<br>
+                    Other formats supported
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <strong>Video Resolution</strong><br>
+                    1080p, 1440p, 4K recommended
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <strong>Aspect Ratio</strong><br>
+                    16:9 (landscape)<br>
+                    9:16 (vertical)
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e5e5e5;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #dee2e6;
+        }
+
+        .video-card {
+            aspect-ratio: 9 / 16;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-title {
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row min-vh-100">
+
+        <div class="col-auto sidebar d-flex flex-column p-4">
+            <h5 class="mb-4">Software Engineering Project Studio</h5>
+
+            <a href="/" class="text-decoration-none mb-2">Home</a>
+            <a href="/upload/" class="text-decoration-none mb-2">Upload</a>
+            <a href="/profile/" class="text-decoration-none mb-2 fw-bold">Profile</a>
+
+            <div class="mt-auto">
+                <div class="text-success small mb-2">
+                    Logged in as {{ user.username }}
+                </div>
+                <a href="/logout/" class="btn btn-outline-danger w-100">Logout</a>
+            </div>
+        </div>
+
+        <div class="col p-5">
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="profile-avatar me-4"></div>
+
+                <div>
+                    <h4 class="mb-1">{{ user.username }}</h4>
+                    <div class="text-muted small mb-2">
+                        0 Following · 0 Followers · {{ videos.count }} Videos
+                    </div>
+
+                    <button class="btn btn-outline-dark btn-sm">
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row mt-4">
+
+                {% for video in videos %}
+                <div class="col-md-3 mb-4">
+                    <div class="video-card">
+                        <video controls>
+                            <source src="{{ video.video.url }}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="video-title">
+                        {{ video.title }}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No videos uploaded yet.</p>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

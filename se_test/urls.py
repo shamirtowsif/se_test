@@ -16,11 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import login_view, signup_view, home_view
+from main.views import home_view, login_view, signup_view, upload_view, logout_view, profile_view
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", home_view, name="home"),
     path("login/", login_view, name="login"),
     path("signup/", signup_view, name="signup"),
+    path("upload/", upload_view, name="upload"),
+    path("profile/", profile_view, name="profile"),
+    path("logout/", logout_view, name="logout"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -42,9 +42,14 @@
             <div class="mb-2">Explore</div>
             <div class="mb-2">Following</div>
             <div class="mb-2">Upload</div>
-
             <div class="mt-auto">
-                <a href="/login" class="btn btn-primary w-100">Log in</a>
+                {% if user.is_authenticated %}
+                    <div class="text-success mb-2">Logged in as {{ user.username }}</div>
+                    <a href="/logout" class="btn btn-danger w-100">Logout</a>
+                {% else %}
+                    <a href="/login" class="btn btn-primary w-100 mb-2">Log in</a>
+                    <a href="/signup" class="btn btn-outline-primary w-100">Sign up</a>
+                {% endif %}
             </div>
         </div>
 
