@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Video
+import os
 
 # Create your views here.
 def home_view(request):
@@ -22,9 +23,10 @@ def upload_view(request):
         video_file = request.FILES.get("video")
 
         if video_file:
+            filename = os.path.splitext(video_file.name)[0]
             Video.objects.create(
                 user=request.user,
-                title="Test",
+                title=filename,
                 video=video_file
             )
             return redirect("home")
