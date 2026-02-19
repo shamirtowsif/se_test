@@ -9,6 +9,16 @@ import os
 def home_view(request):
     return render(request, "main/home.html")
 
+
+@login_required
+def show_video_view(request, video_id):
+    video = Video.objects.get(id=video_id)
+
+    return render(request, "main/show_video.html", {
+        "video": video
+    })
+
+
 @login_required
 def profile_view(request):
     videos = Video.objects.filter(user=request.user).order_by("-uploaded_at")

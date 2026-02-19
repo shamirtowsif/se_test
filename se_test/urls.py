@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from main.views import home_view, login_view, signup_view, upload_view, logout_view, profile_view
+from main.views import home_view, login_view, signup_view, upload_view, logout_view, profile_view, show_video_view
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path("upload/", upload_view, name="upload"),
     path("profile/", profile_view, name="profile"),
     path("logout/", logout_view, name="logout"),
+    path("video/<int:video_id>/", show_video_view, name="show_video"),
 ]
 
 if settings.DEBUG:

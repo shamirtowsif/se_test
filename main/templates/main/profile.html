@@ -88,14 +88,17 @@
 
                 {% for video in videos %}
                 <div class="col-md-3 mb-4">
-                    <div class="video-card">
-                        <video controls>
-                            <source src="{{ video.video.url }}" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="video-title">
-                        {{ video.title }}
-                    </div>
+
+                    <a href="{% url 'show_video' video.id %}" class="text-decoration-none text-dark">
+                        <div class="video-card">
+                            <video muted>
+                                <source src="{{ video.video.url }}" type="video/mp4">
+                            </video>
+                        </div>
+                        <div class="video-title">
+                            {{ video.title }}
+                        </div>
+                    </a>
                 </div>
                 {% empty %}
                 <p class="text-muted">No videos uploaded yet.</p>
