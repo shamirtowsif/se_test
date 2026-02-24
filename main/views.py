@@ -4,6 +4,20 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import Video
 import os
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+
+@login_required
+def video_detail(request, video_id):
+    video = get_object_or_404(Video, id=video_id)
+
+    return JsonResponse({
+        "id": video.id,
+        "title": video.title,
+        "video_url": video.video.url,
+        "uploaded_by": video.user.username,
+        "uploaded_at": video.uploaded_at.isoformat(),
+    })
 
 # Create your views here.
 def home_view(request):

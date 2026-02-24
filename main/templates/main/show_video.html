@@ -16,40 +16,15 @@
         <div class="col-lg-8">
 
             <div class="card bg-black shadow-lg border-0">
-                
-                <video 
-                    class="w-100 rounded-top"
-                    controls
-                    {% if video.thumbnail %}
-                        poster="{{ video.thumbnail.url }}"
-                    {% endif %}
-                >
-                    <source src="{{ video.video.url }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-
-                <div class="card-body">
-
-                    <h5 class="card-title">{{ video.title }}</h5>
-                    <p class="card-text text-secondary">
-                    Uploaded by {{ video.user.username }} • {{ video.uploaded_at|timesince }}
-                    </p>
-
-                    <div class="d-flex gap-3 mt-3">
-                        <button class="btn btn-outline-light btn-sm">Like</button>
-                        <button class="btn btn-outline-light btn-sm">Share</button>
-                        <button class="btn btn-outline-light btn-sm">Comment</button>
-                    </div>
-
-                </div>
-
+                <div id="video-container"></div>
             </div>
 
         </div>
     </div>
 
 </div>
-
+<script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/show_video.js' %}"></script>
 </body>
 </html>
