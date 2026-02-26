@@ -8,6 +8,22 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 @login_required
+def videos_view(request):
+    videos = Video.objects.filter(user=request.user).order_by("-uploaded_at")
+
+    data = []
+
+    for video in videos:
+        data.append({
+            "id": video.id,
+            "title": video.title,
+            "video_url": video.video.url,
+            "uploaded_at": video.uploaded_at.isoformat(),
+        })
+
+    return JsonResponse(data, safe=False)
+
+@login_required
 def video_detail(request, video_id):
     video = get_object_or_404(Video, id=video_id)
 
@@ -35,11 +51,9 @@ def show_video_view(request, video_id):
 
 @login_required
 def profile_view(request):
-    videos = Video.objects.filter(user=request.user).order_by("-uploaded_at")
+    # videos = Video.objects.filter(user=request.user).order_by("-uploaded_at")
 
-    return render(request, "main/profile.html", {
-        "videos": videos
-    })
+    return render(request, "main/profile.html")
 
 @login_required
 def upload_view(request):
@@ -53,7 +67,7 @@ def upload_view(request):
                 title=filename,
                 video=video_file
             )
-            return redirect("home")
+            return redirect("profile")
     return render(request, "main/upload.html")
 
 def logout_view(request):

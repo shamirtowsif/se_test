@@ -72,10 +72,9 @@
 
                 <div>
                     <h4 class="mb-1">{{ user.username }}</h4>
-                    <div class="text-muted small mb-2">
-                        0 Following · 0 Followers · {{ videos.count }} Videos
+                    <div class="text-muted small mb-2" id="profile-stats">
+                        0 Following · 0 Followers · 0 Videos
                     </div>
-
                     <button class="btn btn-outline-dark btn-sm">
                         Edit Profile
                     </button>
@@ -85,25 +84,7 @@
             <hr>
 
             <div class="row mt-4">
-
-                {% for video in videos %}
-                <div class="col-md-3 mb-4">
-
-                    <a href="{% url 'show_video' video.id %}" class="text-decoration-none text-dark">
-                        <div class="video-card">
-                            <video muted>
-                                <source src="{{ video.video.url }}" type="video/mp4">
-                            </video>
-                        </div>
-                        <div class="video-title">
-                            {{ video.title }}
-                        </div>
-                    </a>
-                </div>
-                {% empty %}
-                <p class="text-muted">No videos uploaded yet.</p>
-                {% endfor %}
-
+                <div id="video-grid" class="row mt-4"></div>
             </div>
 
         </div>
@@ -111,6 +92,8 @@
     </div>
 </div>
 
+<script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/profile.js' %}"></script>
 </body>
 </html>
