@@ -33,6 +33,7 @@ urlpatterns = [
     
     path("videos/<int:video_id>/", video_detail, name="video-detail"),
     path("videos/", videos_view, name="videos"),
+    path("videos/upload/", upload_video_api, name="video-upload-api"),
 ]
 
 if settings.DEBUG:

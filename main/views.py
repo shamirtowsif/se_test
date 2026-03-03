@@ -35,6 +35,32 @@ def video_detail(request, video_id):
         "uploaded_at": video.uploaded_at.isoformat(),
     })
 
+@login_required
+def upload_video_api(request):
+    if request.method == "POST":
+        video_file = request.FILES.get("video")
+
+        if not video_file:
+            return JsonResponse({"error": "No video file provided"}, status=400)
+
+        filename = os.path.splitext(video_file.name)[0]
+
+        video = Video.objects.create(
+            user=request.user,
+            title=filename,
+            video=video_file
+        )
+
+        return JsonResponse({
+            "message": "Video uploaded successfully",
+            "id": video.id,
+            "title": video.title,
+            "video_url": video.video.url,
+            "uploaded_at": video.uploaded_at.isoformat(),
+        }, status=201)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
 # Create your views here.
 def home_view(request):
     return render(request, "main/home.html")
@@ -57,17 +83,6 @@ def profile_view(request):
 
 @login_required
 def upload_view(request):
-    if request.method == "POST":
-        video_file = request.FILES.get("video")
-
-        if video_file:
-            filename = os.path.splitext(video_file.name)[0]
-            Video.objects.create(
-                user=request.user,
-                title=filename,
-                video=video_file
-            )
-            return redirect("profile")
     return render(request, "main/upload.html")
 
 def logout_view(request):
