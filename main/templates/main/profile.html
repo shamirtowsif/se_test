@@ -43,6 +43,21 @@
             font-size: 0.85rem;
             margin-top: 6px;
         }
+
+        .placeholder {
+            display: inline-block;
+            height: 12px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .placeholder-glow .placeholder {
+            animation: placeholder-glow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes placeholder-glow {
+            50% { opacity: .4; }
+        }
     </style>
 </head>
 <body>
@@ -72,9 +87,16 @@
 
                 <div>
                     <h4 class="mb-1">{{ user.username }}</h4>
-                    <div class="text-muted small mb-2" id="profile-stats">
-                        0 Following · 0 Followers · 0 Videos
+                    <div class="small mb-2 placeholder-glow" id="profile-stats">
+                        <span class="placeholder col-2 d-inline-block me-1"></span>
+                        <span class="placeholder col-2 d-inline-block me-1"></span>
+                        <span class="placeholder col-2 d-inline-block"></span>
                     </div>
+                    <!-- <div class="small mb-2 placeholder-glow" id="profile-stats"> -->
+                    <!--     <span class="placeholder col-2"></span> -->
+                    <!--     <span class="placeholder col-2"></span> -->
+                    <!--     <span class="placeholder col-2"></span> -->
+                    <!-- </div> -->
                     <button class="btn btn-outline-dark btn-sm">
                         Edit Profile
                     </button>

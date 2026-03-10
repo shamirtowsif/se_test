@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from .models import Video
 import os
 from django.http import JsonResponse
@@ -85,32 +86,62 @@ def profile_view(request):
 def upload_view(request):
     return render(request, "main/upload.html")
 
+# def logout_view(request):
+#     logout(request)
+#     return redirect("home")
+@require_POST
 def logout_view(request):
     logout(request)
-    return redirect("home")
+    return JsonResponse({"message": "logged out"})
 
+# def login_view(request):
+#     if request.method == "POST":
+#         user = authenticate(
+#             request,
+#             username=request.POST.get("username"),
+#             password=request.POST.get("password"),
+#         )
+#         if user:
+#             login(request, user)
+#             return redirect("home")
+
+#     return render(request, "main/login.html")
+@require_POST
 def login_view(request):
-    if request.method == "POST":
-        user = authenticate(
-            request,
-            username=request.POST.get("username"),
-            password=request.POST.get("password"),
-        )
-        if user:
-            login(request, user)
-            return redirect("home")
 
-    return render(request, "main/login.html")
+    user = authenticate(
+        request,
+        username=request.POST.get("username"),
+        password=request.POST.get("password"),
+    )
 
-
-def signup_view(request):
-    if request.method == "POST":
-        user = User.objects.create_user(
-            username=request.POST.get("username"),
-            email=request.POST.get("email"),
-            password=request.POST.get("password"),
-        )
+    if user:
         login(request, user)
-        return redirect("home")
+        return JsonResponse({"message": "login successful"})
 
-    return render(request, "main/signup.html")
+    return JsonResponse({"error": "invalid credentials"}, status=401)
+
+
+# def signup_view(request):
+#     if request.method == "POST":
+#         user = User.objects.create_user(
+#             username=request.POST.get("username"),
+#             email=request.POST.get("email"),
+#             password=request.POST.get("password"),
+#         )
+#         login(request, user)
+#         return redirect("home")
+
+#     return render(request, "main/signup.html")
+@require_POST
+def signup_view(request):
+
+    user = User.objects.create_user(
+        username=request.POST.get("username"),
+        email=request.POST.get("email"),
+        password=request.POST.get("password"),
+    )
+
+    login(request, user)
+
+    return JsonResponse({"message": "signup successful"}, status=201)
