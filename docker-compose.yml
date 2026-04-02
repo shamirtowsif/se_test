@@ -19,10 +19,11 @@ services:
 
   web:
     build: .
+    command: /bin/sh -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8080 se_test.wsgi:application"
     ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
+      - "8000:8080"
+    # volumes:
+    #   - .:/app
     depends_on:
       db:
         condition: service_healthy
