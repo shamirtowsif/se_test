@@ -17,16 +17,27 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def env_bool(name, default=False):
+    return os.environ.get(name, str(default)).lower() in {"1", "true", "yes", "on"}
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^=^z^i8e@0&gyx5@@3ey324hk-!^tzo&(r-&!&!%ahh&2a#k#^'
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-^=^z^i8e@0&gyx5@@3ey324hk-!^tzo&(r-&!&!%ahh&2a#k#^",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool("DJANGO_DEBUG", True)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
+    if host.strip()
+]
 
 
 # Application definition
@@ -86,24 +97,24 @@ WSGI_APPLICATION = 'se_test.wsgi.application'
 #     }
 # }
 
-USE_SQLITE = os.environ.get("USE_SQLITE", "False") == "True"
+USE_SQLITE = env_bool("USE_SQLITE", False)
 
 if USE_SQLITE:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": os.environ.get("SQLITE_PATH", str(BASE_DIR / "db.sqlite3")),
         }
     }
 else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "se_test",
-            "USER": "se_shamir",
-            "PASSWORD": "se_pass",
-            "HOST": "db",
-            "PORT": "3306",
+            "NAME": os.environ.get("MYSQL_DATABASE", "se_test"),
+            "USER": os.environ.get("MYSQL_USER", "se_shamir"),
+            "PASSWORD": os.environ.get("MYSQL_PASSWORD", "se_pass"),
+            "HOST": os.environ.get("MYSQL_HOST", "db"),
+            "PORT": os.environ.get("MYSQL_PORT", "3306"),
         }
     }
 
@@ -152,7 +163,8 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.environ.get("MEDIA_ROOT", str(BASE_DIR / "media"))
+SERVE_MEDIA = env_bool("SERVE_MEDIA", DEBUG)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -160,5 +172,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://se-test-app-205073294860.us-central1.run.app"
+    origin.strip()
+    for origin in os.environ.get(
+        "DJANGO_CSRF_TRUSTED_ORIGINS",
+        "https://se-test-app-205073294860.us-central1.run.app",
+    ).split(",")
+    if origin.strip()
 ]

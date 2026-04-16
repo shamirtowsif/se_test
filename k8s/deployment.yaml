@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: se-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: se-test
+  template:
+    metadata:
+      labels:
+        app: se-test
+    spec:
+      containers:
+        - name: web
+          image: se-test:latest
+
+          command: ["/bin/sh", "-c"]
+          args:
+            - python manage.py migrate &&
+              python manage.py collectstatic --noinput &&
+              python manage.py runserver 0.0.0.0:8080
+          imagePullPolicy: Never
+          env:
+            - name: USE_SQLITE
+              value: "True"
+            - name: SQLITE_PATH
+              value: /data/db.sqlite3
+            - name: MEDIA_ROOT
+              value: /data/media
+            - name: SERVE_MEDIA
+              value: "True"
+            - name: DJANGO_DEBUG
+              value: "False"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "*"
+            - name: DJANGO_CSRF_TRUSTED_ORIGINS
+              value: http://localhost
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: se-test-secret
+                  key: DJANGO_SECRET_KEY
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: app-data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 20
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: se-test-data
